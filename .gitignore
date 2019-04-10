@@ -12,6 +12,9 @@
 # use yarn for this project instead of npm
 package-lock.json
 
+# ignore output compile folder
+/dist
+
 # misc
 .DS_Store
 .env.local
