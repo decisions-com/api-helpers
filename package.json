@@ -7,9 +7,18 @@
   "author": "Sam Jones <sam@decisions.com>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "build": "tsc",
+    "prebuild": "npm run lint"
+  },
   "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/js-cookie": "^2.2.2",
     "jest": "^24.1.0",
     "ts-jest": "^24.0.0",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.3.3333"
   },
   "dependencies": {
