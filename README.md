@@ -9,9 +9,83 @@ This is essentially a collection of helper functions, all of which are opt-in.
 1. ["AuthApi"](docs/modules/_authapi_.md) contains helper functions to simplify and DRY up logic related to forming URLs for various types of decisions end-points,
 as well as some convenience methods for retrieving data via `fetch`.
 
+### Usage
+
+_If you are inside a Decisions web host, the helper functions should
+load auth IDs, etc. for you. _
+
+Otherwise:
+
+#### Configuration
+
+Tell the API Where to find your Decisions instance
+
+```html
+<script>
+  // create global config variable:
+  var DecisionsRestConfig = {
+    cors: false,
+    restRoot: "/decisions/Primary/"
+  };
+</script>
+```
+
+Alternately, you can put a `rest-config.json` at the web host root, but then your UI has to handle the fact that it's loaded asynchronously.
+
+In your app code, tell that config to load:
+
+```javascript
+import { ApiConfig } from "@decisions/api-helpers/ApiConfig";
+// ...
+ApiConfig.loadConfig();
+```
+
+#### Create a Session
+
+(This is only necessary outside a Decisions Web Host.)
+
+```javascript
+AuthApi.login(this.state.username, this.state.password)
+  .then(() => { /* Handle successful login */}))
+  .catch(() => { /* Handle successful */ });
+
+```
+
+#### Use Helper Functions
+
+Use helper functions to generate URLs
+
+```javascript
+import {
+  getFlowIdUrl,
+  getWrappedPostFetch
+} from "@decisions/api-helpers/ApiHelpers";
+
+//...
+
+/**
+ * builds the URL with little boilerplate:
+ */
+const url = getFlowIdUrl("123-flow-4567-uuid-8901");
+const body = {/* ... */};
+
+/**
+ * Make `fetch` API call,
+ * with a chunk of `Promise` boilerplate tucked away. 
+ * 
+ * @returns a promise  "resultPropIWant" 
+ */ 
+return getWrappedPostFetch(url, body, "resultPropIWant");
+
+```
+
+
 ## Road Map
-1. Unit tests
 1. Publish to npm & yarnpkg.
+1. Unit tests
 1. Add support for Decisions Webhooks
+1. Abstract which API is making the requests
+    * The `fetch` methods are fairly standard, and opt in. Good start.
+    * Adding modules for other popular tools would be great. 
 
 
