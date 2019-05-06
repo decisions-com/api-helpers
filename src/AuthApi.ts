@@ -34,7 +34,7 @@ export const AuthApi = {
       fetch(`${ApiConfig.restRoot}REST/AccountService/LoginUser`, {
         body: JSON.stringify({ userid, password, outputType: "JSON" }),
         method: "POST",
-        mode: ApiConfig.getFetchMode()
+        mode: ApiConfig.getFetchMode(),
       })
         .then(async response => {
           if (response.status >= 300) {
@@ -54,7 +54,7 @@ export const AuthApi = {
         })
     ),
 
-  logout: () => Cookies.remove(SESSION_ID_COOKIE)
+  logout: () => Cookies.remove(SESSION_ID_COOKIE),
 };
 
 export const sessionIdSelector = (loginResult: ILoginUserResult) =>

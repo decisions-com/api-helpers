@@ -97,7 +97,7 @@ export function getWrappedFetch<T>(url: string, propertyName?: string) {
   return new Promise<T>(async (resolve, reject) => {
     try {
       const response = await fetch(url, {
-        mode: ApiConfig.getFetchMode()
+        mode: ApiConfig.getFetchMode(),
       });
       return getResponseJson(
         response,
@@ -145,7 +145,7 @@ export function makePostFetchInit(body: object): RequestInit {
   return {
     body: JSON.stringify({ outputtype: "RawJson", ...body }),
     method: "POST",
-    mode: ApiConfig.getFetchMode()
+    mode: ApiConfig.getFetchMode(),
   };
 }
 

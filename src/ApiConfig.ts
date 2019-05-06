@@ -36,7 +36,7 @@ export const ApiConfig = {
       )
       .catch(logRootConfigLoadError);
   },
-  restRoot: DEFAULT_ROOT
+  restRoot: DEFAULT_ROOT,
 };
 
 function logRootConfigLoadError(reason: any) {
