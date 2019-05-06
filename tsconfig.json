@@ -18,6 +18,13 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true
   },
+  "typedocOptions": {
+    "mode": "modules",
+    "out": "docs",
+    "theme": "markdown",
+    "includeDeclarations": true,
+    "excludeExternals": true
+  },
   "exclude": [
     "node_modules",
     "dist",
