@@ -2,7 +2,7 @@
   "name": "@decisions/api-helpers",
   "version": "0.0.1",
   "description": "JavaScript toolkit for REST, etc. for external UIs using Decisions as a back-end.",
-  "main": "index.js",
+  "main": "ApiHelpers.js",
   "repository": "git@github.com:decisions-com/api-helpers.git",
   "author": "Sam Jones <sam@decisions.com>",
   "license": "MIT",
