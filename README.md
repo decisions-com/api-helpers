@@ -81,7 +81,6 @@ return getWrappedPostFetch(url, body, "resultPropIWant");
 
 
 ## Road Map
-1. Publish to npm & yarnpkg.
 1. Unit tests
 1. Add support for Decisions Webhooks
 1. Abstract which API is making the requests
