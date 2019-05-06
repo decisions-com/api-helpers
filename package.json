@@ -9,9 +9,10 @@
   "private": false,
   "scripts": {
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "prebuild": "rm -rf dist && npm run lint && prettier \"src/**\" --check",
     "build": "tsc",
-    "prebuild": "npm run lint && prettier \"src/**\" --check",
-    "prettier": "prettier \"src/**\" --write"
+    "postbuild": "node post-build.js",
+    "prettier": "prettier \"src/**\" --write",
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",

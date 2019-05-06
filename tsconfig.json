@@ -2,11 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "dist",
+    "declaration": true,
     "module": "esnext",
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
-    "allowJs": true,
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
