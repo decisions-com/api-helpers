@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "JavaScript toolkit for REST, etc. for external UIs using Decisions as a back-end.",
   "main": "ApiHelpers.js",
-  "repository": "git@github.com:decisions-com/api-helpers.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/decisions-com/api-helpers.git"
+  },
   "author": "Sam Jones <sam@decisions.com>",
   "license": "MIT",
   "private": false,
@@ -31,5 +34,12 @@
   "dependencies": {
     "js-cookie": "^2.2.0",
     "tslib": "^1.9.3"
+  },
+  "bugs": {
+    "url": "https://github.com/decisions-com/api-helpers/issues"
+  },
+  "homepage": "https://github.com/decisions-com/api-helpers#readme",
+  "directories": {
+    "doc": "docs"
   }
 }
