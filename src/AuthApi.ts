@@ -11,8 +11,12 @@ export interface ILoginUserResult {
 const SESSION_ID_COOKIE = "DecisionsSessionID";
 const USER_COOKIE = "DecisionsUsername";
 
-// TODO API call to call on load, to ping with a session ID to find out if it's valid?
+const LOGIN_USER = "REST/AccountService/LoginUser";
+const JWT_LOGIN_USER = "REST/AccountService/LoginAndGetJWTToken";
 
+const getAuthUri = () => (ApiConfig.jwt ? JWT_LOGIN_USER : LOGIN_USER);
+// TODO API call to call on load, to ping with a session ID to find out if it's valid?
+let j
 /**
  * Auth and session related API calls.
  */
@@ -25,13 +29,15 @@ export const AuthApi = {
    * Current username
    */
   getSessionUserName: () => Cookies.get(USER_COOKIE),
+  getToken: () => AuthApi.jwtToken,
+  jwtToken:'',
   /**
    * Make REST call to log in.
    * @return promise that resolves the cookie.
    */
   login: (userid: string, password: string) =>
     new Promise<string>((resolve, reject) =>
-      fetch(`${ApiConfig.restRoot}REST/AccountService/LoginUser`, {
+      fetch(`${ApiConfig.restRoot}${getAuthUri()}`, {
         body: JSON.stringify({ userid, password, outputType: "JSON" }),
         method: "POST",
         mode: ApiConfig.getFetchMode(),
@@ -44,16 +50,23 @@ export const AuthApi = {
           }
           const json = await response.json();
           const id = sessionIdSelector(json.LoginUserResult);
-          Cookies.set(SESSION_ID_COOKIE, id);
-          // USER_COOKIE will be set by headers, non CORS.
-          Cookies.set(USER_COOKIE, userid);
+          if (ApiConfig.jwt) {
+            // tslint:disable-next-line:no-console
+            console.log(json);
+            AuthApi.jwtToken = json;
+          } else {
+            // use cookies if JWT flag is set to false.
+            Cookies.set(SESSION_ID_COOKIE, id);
+            // USER_COOKIE will be set by headers, non CORS.
+            Cookies.set(USER_COOKIE, userid);
+          }
           resolve(id);
         })
         .catch(reason => {
           reject(reason);
         })
     ),
-
+  
   logout: () => Cookies.remove(SESSION_ID_COOKIE),
 };
 

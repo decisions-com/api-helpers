@@ -3,6 +3,7 @@ const DEFAULT_ROOT = "../decisions/Primary/";
 declare var DecisionsRestConfig: {
   cors: boolean;
   restRoot: string;
+  jwt: boolean;
 };
 
 /**
@@ -15,11 +16,13 @@ export const ApiConfig = {
     return this.cors ? "cors" : "same-origin";
   },
   isLoaded: false,
+  jwt: false,
   loadConfig() {
     // check for it on the global namespace:
     if (!!DecisionsRestConfig) {
       this.cors = DecisionsRestConfig.cors;
       this.restRoot = DecisionsRestConfig.restRoot;
+      this.jwt = DecisionsRestConfig.jwt;
       return;
     }
     // if it wasn't there, try to load it:
