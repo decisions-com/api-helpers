@@ -27,10 +27,10 @@ export const ApiConfig = {
     }
     // if it wasn't there, try to load it:
     fetch(`./rest-config.json`)
-      .then(value =>
+      .then((value) =>
         value
           .json()
-          .then(json => {
+          .then((json) => {
             this.restRoot = json.restRoot;
             this.cors = json.cors;
             this.isLoaded = true;

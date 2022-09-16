@@ -1,6 +1,6 @@
 {
   "name": "@decisions/api-helpers",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "JavaScript toolkit for REST, etc. for external UIs using Decisions as a back-end.",
   "main": "ApiHelpers.js",
   "repository": {
@@ -19,21 +19,21 @@
     "doc": "rm -rf docs && typedoc"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.11",
-    "@types/js-cookie": "^2.2.2",
-    "jest": "^24.1.0",
+    "@types/jest": "^28.1.7",
+    "@types/js-cookie": "^3.0.2",
+    "jest": "^28.1.3",
     "ncp": "^2.0.0",
-    "prettier": "^1.17.0",
-    "ts-jest": "^24.0.0",
-    "tslint": "^5.15.0",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.8",
+    "tslint": "^6.1.3",
     "tslint-config-prettier": "^1.18.0",
-    "typedoc": "^0.14.2",
-    "typedoc-plugin-markdown": "^1.2.0",
-    "typescript": "^3.3.3333"
+    "typedoc": "^0.23.10",
+    "typedoc-plugin-markdown": "^3.13.4",
+    "typescript": "^4.7.4"
   },
   "dependencies": {
-    "js-cookie": "^2.2.0",
-    "tslib": "^1.9.3"
+    "js-cookie": "^3.0.1",
+    "tslib": "^2.4.0"
   },
   "bugs": {
     "url": "https://github.com/decisions-com/api-helpers/issues"

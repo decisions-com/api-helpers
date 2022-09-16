@@ -13,10 +13,13 @@ const USER_COOKIE = "DecisionsUsername";
 
 const LOGIN_USER = "REST/AccountService/LoginUser";
 const JWT_LOGIN_USER = "REST/AccountService/LoginAndGetJWTToken";
+interface IJwtResult {
+  LoginAndGetJWTTokenResult: string;
+}
 
 const getAuthUri = () => (ApiConfig.jwt ? JWT_LOGIN_USER : LOGIN_USER);
 // TODO API call to call on load, to ping with a session ID to find out if it's valid?
-let j
+
 /**
  * Auth and session related API calls.
  */
@@ -30,7 +33,7 @@ export const AuthApi = {
    */
   getSessionUserName: () => Cookies.get(USER_COOKIE),
   getToken: () => AuthApi.jwtToken,
-  jwtToken:'',
+  jwtToken: "",
   /**
    * Make REST call to log in.
    * @return promise that resolves the cookie.
@@ -38,35 +41,44 @@ export const AuthApi = {
   login: (userid: string, password: string) =>
     new Promise<string>((resolve, reject) =>
       fetch(`${ApiConfig.restRoot}${getAuthUri()}`, {
-        body: JSON.stringify({ userid, password, outputType: "JSON" }),
+        body: JSON.stringify(
+          ApiConfig.jwt
+            ? {
+                userName: userid,
+                password,
+                outputtype: "Json",
+              }
+            : { userid, password, outputType: "JSON" }
+        ),
         method: "POST",
         mode: ApiConfig.getFetchMode(),
       })
-        .then(async response => {
+        .then(async (response) => {
           if (response.status >= 300) {
             // currently receive 500s for failed logins.
             // clear header-set session ID for simple client-side session checks.
             reject(response.statusText);
           }
           const json = await response.json();
-          const id = sessionIdSelector(json.LoginUserResult);
           if (ApiConfig.jwt) {
             // tslint:disable-next-line:no-console
             console.log(json);
-            AuthApi.jwtToken = json;
+            AuthApi.jwtToken = (json as IJwtResult).LoginAndGetJWTTokenResult;
+            resolve(AuthApi.jwtToken);
           } else {
+            const id = sessionIdSelector(json.LoginUserResult);
             // use cookies if JWT flag is set to false.
             Cookies.set(SESSION_ID_COOKIE, id);
             // USER_COOKIE will be set by headers, non CORS.
             Cookies.set(USER_COOKIE, userid);
+            resolve(id);
           }
-          resolve(id);
         })
-        .catch(reason => {
+        .catch((reason) => {
           reject(reason);
         })
     ),
-  
+
   logout: () => Cookies.remove(SESSION_ID_COOKIE),
 };
 

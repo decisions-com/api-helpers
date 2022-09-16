@@ -1,16 +1,39 @@
 import { ApiConfig } from "./ApiConfig";
 import { AuthApi } from "./AuthApi";
 
-export function getReportUrl(reportId: string) {
-  return getUrlWithSessionId("ReportId", reportId);
+type HttpMethod = "GET" | "POST";
+
+/**
+ * @param reportId to run
+ * @param method http method
+ * @returns url, with session ID, etc. query params for GET requests only.
+ */
+export function getReportUrl(reportId: string, method: HttpMethod = "GET") {
+  return method === "GET"
+    ? getUrlWithSessionId("Report", reportId)
+    : getRestUrl("Report", reportId);
 }
 
-export function getFlowIdUrl(flowId: string) {
-  return getUrlWithSessionId("FlowId", flowId);
+/**
+ * @param flowId to run
+ * @param method http method
+ * @returns url, with session ID, etc. query params for GET requests only.
+ */
+export function getFlowIdUrl(flowId: string, method: HttpMethod = "GET") {
+  return method === "GET"
+    ? getUrlWithSessionId("Flow", flowId)
+    : getRestUrl("Flow", flowId);
 }
 
-export function getRuleIdUrl(ruleId: string) {
-  return getUrlWithSessionId("RuleId", ruleId, "Json");
+/**
+ * @param ruleId to run
+ * @param method http method
+ * @returns url, with session ID, etc. query params for GET requests only.
+ */
+export function getRuleIdUrl(ruleId: string, method: HttpMethod = "GET") {
+  return method === "GET"
+    ? getUrlWithSessionId("Rule", ruleId, "JSON")
+    : getRestUrl("Rule", ruleId);
 }
 
 /**
@@ -25,9 +48,7 @@ export function getFlowAliasUrl(flowAlias: string) {
 
 export function getServiceEndPointUrl(path: string) {
   const sessionId = AuthApi.getSessionId();
-  return `${
-    ApiConfig.restRoot
-  }REST/${path}?outputtype=JSON&sessionId=${sessionId}`;
+  return `${ApiConfig.restRoot}REST/${path}?outputtype=JSON&sessionId=${sessionId}`;
 }
 
 /**
@@ -37,14 +58,33 @@ export function getServiceEndPointUrl(path: string) {
  * @return url with sessionId query parameter appended.
  */
 export function getUrlWithSessionId(
-  type: "ReportId" | "FlowId" | "FlowAlias" | "RuleId",
+  type: "Report" | "Flow" | "FlowAlias" | "Rule",
   id: string,
-  output: "Json" | "RawJson" = "RawJson"
+  output: "JSON" | "RawJson" = "RawJson"
 ) {
   const sessionId = AuthApi.getSessionId(); // TODO escape?
-  return `${
-    ApiConfig.restRoot
-  }?${type}=${id}&Action=api&outputtype=${output}&sessionId=${sessionId}`;
+  return `${getRestUrl(type, id)}?sessionId=${sessionId}&outputtype=${output}`;
+}
+
+/**
+ * Get decisions rest URL.
+ * @param type "ReportId" | "FlowId" | "FlowAlias" depending on what's being fetched
+ * @param id id, path, or alias, depending on the integration type.
+ * @returns url with path for item and it's ID
+ */
+export function getRestUrl(
+  type: "Report" | "Flow" | "FlowAlias" | "Rule",
+  id: string
+) {
+  return getRestPath(`${type}/${id}`);
+}
+
+export function getRestPath(path: string) {
+  return `${getRestRoot()}${path}`;
+}
+
+export function getRestRoot() {
+  return `${ApiConfig.restRoot.replace(/\/$/, "")}/restapi/`;
 }
 
 type ResolvingCallback<T> = (json: T) => void;
@@ -117,6 +157,7 @@ export function getWrappedFetch<T>(url: string, propertyName?: string) {
  * Convenience POST fetch wrapper, which covers some idiosyncracies in the Decisions API, related to return types,
  * and common result wrappers.
  * @param url to fetch
+ * @param body object to stringify as post body
  * @param propertyName to pull data from, if provided
  * @returns promise resolving expected type
  */
@@ -142,8 +183,9 @@ export function getWrappedPostFetch<T>(
 }
 
 export function makePostFetchInit(body: object): RequestInit {
+  const sessionId = AuthApi.getSessionId();
   return {
-    body: JSON.stringify({ outputtype: "RawJson", ...body }),
+    body: JSON.stringify({ outputtype: "RawJson", sessionId, ...body }),
     method: "POST",
     mode: ApiConfig.getFetchMode(),
   };
